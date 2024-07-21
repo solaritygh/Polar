@@ -1,17 +1,9 @@
 package com.hpfxd.polar;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.hpfxd.polar.command.CommandManager;
-import com.hpfxd.polar.event.EventManager;
-import com.hpfxd.polar.network.NetworkManager;
-import com.hpfxd.polar.player.Player;
-import com.hpfxd.polar.world.World;
-import lombok.Getter;
-import lombok.extern.slf4j.Slf4j;
-
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -19,6 +11,17 @@ import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.hpfxd.polar.command.CommandManager;
+import com.hpfxd.polar.event.EventManager;
+import com.hpfxd.polar.network.NetworkManager;
+import com.hpfxd.polar.player.Player;
+import com.hpfxd.polar.world.World;
+
+import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class Polar {
@@ -37,7 +40,7 @@ public class Polar {
     @Getter private final EventManager eventManager = new EventManager();
     @Getter private final CommandManager commandManager = new CommandManager();
 
-    Polar() {
+    Polar() throws IOException {
         log.info("Starting Polar.");
         polar = this;
         this.config = this.readConfig();
@@ -58,11 +61,36 @@ public class Polar {
         this.networkManager.shutdown();
     }
 
-    private PolarConfig readConfig() {
+    private PolarConfig readConfig() throws IOException {
         File configFile = new File("config.json");
 
         if (!configFile.exists()) {
-            throw new RuntimeException("Configuration file does not exist.");
+			configFile.createNewFile();
+			
+            BufferedWriter writer;
+            
+			writer = new BufferedWriter(new FileWriter(configFile));
+			
+			String json = "{\n" +
+				    "  \"host\": \"0.0.0.0\",\n" +
+				    "  \"port\": 25565,\n" +
+				    "  \"worldSize\": 16,\n" +
+				    "  \"viewDistance\": 4,\n" +
+				    "  \"spawn\": {\n" +
+				    "    \"x\": 128.5,\n" +
+				    "    \"y\": 6,\n" +
+				    "    \"z\": 128.5\n" +
+				    "  },\n" +
+				    "  \"sendEntityPacketEveryTick\": false,\n" +
+				    "  \"coreExecutorPoolSize\": 4,\n" +
+				    "  \"packetWriterExecutorPoolSize\": 2,\n" +
+				    "  \"defaultGameMode\": \"SURVIVAL\"\n" +
+				    "}";
+
+			
+			writer.append(json);
+            
+            writer.close();
         }
 
         try (FileInputStream in = new FileInputStream(configFile);
