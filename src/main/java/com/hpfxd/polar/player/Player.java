@@ -123,7 +123,11 @@ public class Player {
             this.setHealth(20);
             this.teleportToSpawn();
             this.getPlayerInventory().clear();
-
+            
+            this.world.sendPacketToPlayers(new PacketOutChatMessage(new ComponentBuilder(this.name).color(ChatColor.WHITE)
+                .append(" has died.").color(ChatColor.RED)
+                .create()));        
+    
             new PlayerDeathEvent(this).postEvent();
         } else {
             if (health < this.health) {
