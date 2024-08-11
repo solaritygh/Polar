@@ -58,7 +58,7 @@ public class Polar {
 
 	public Player getPlayer(String name) {
 		for (Player player : this.players) {
-			if (player.name.equals(name)) {
+			if (player.name.equalsIgnoreCase(name)) {
 				return player;
 			}
 		}
