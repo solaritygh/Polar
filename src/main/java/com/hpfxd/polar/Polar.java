@@ -56,6 +56,16 @@ public class Polar {
         this.networkManager = new NetworkManager();
     }
 
+	public Player getPlayer(String name) {
+		for (Player player : this.players) {
+			if (player.name.equals(name)) {
+				return player;
+			}
+		}
+
+		return null;
+	}
+
     public void shutdown() {
         log.info("Shutting down.");
         this.networkManager.shutdown();
