@@ -1,5 +1,5 @@
 # Polar
-A lightweight Minecraft server implementation.  
+A lightweight Minecraft server implementation (not based on the mojang server implementation).  
 Currently, only protocol #47 (1.8.x) is supported.
 
 **Code is under heavy construction, using this isn't recommended yet!**
