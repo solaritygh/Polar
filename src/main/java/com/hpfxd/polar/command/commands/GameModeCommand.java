@@ -45,7 +45,7 @@ public class GameModeCommand extends Command {
                     throw new IllegalArgumentException("Invalid game mode \"" + args[0] + "\".");
             }
         } else if (length == 2) {
-            Player target = Polar.getPolar().getPlayer(args[0]);
+            Player target = player.getWorld().getPlayerByName(name);
             
             String s = args[1].toLowerCase();
     
